@@ -36,7 +36,7 @@ elif [[ "$ACTION" == "install" ]]; then
 
     INSTALL_SCRIPT="$(pwd)/packages/$PACKAGE.sh"
     if [[ -f "$INSTALL_SCRIPT" ]]; then
-        echo "INSTALLING::$INSTALL_SCRIPT"
+        echo "INSTALLING::packages::$PACKAGE"
         $INSTALL_SCRIPT
     else
         echo "$LOGGER $INSTALL_SCRIPT not found"
