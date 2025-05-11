@@ -1,0 +1,145 @@
+* {
+  padding: 0px;
+  margin: 0px;
+  border-radius: 0px;
+  font-family: "GeistMono Nerd Font", "Fira Code Nerd Font";
+  font-size: 12px;
+  font-weight: 800;
+  min-height: 0;
+}
+
+window#waybar {
+  background: transparent;
+  color: white;
+  border-radius: 50px;
+}
+
+#disk,
+#window,
+#workspaces,
+#mpris,
+#memory,
+#network,
+#battery,
+#backlight,
+#pulseaudio,
+#clock,
+#idle_inhibitor,
+#tray {
+  margin-right: 3px;
+  color: white;
+  background: #111;
+  padding: 0 15px;
+  border-radius: 16px;
+  border: 2px solid #444;
+  background: rgba(11, 11, 11, 0.7);
+  font-size: 13px;
+}
+
+#tray {
+  padding: 0 8px;
+}
+
+#custom-spotify {
+  padding: 0 10px 0 10px;
+}
+
+#workspaces,
+#window {
+  color: white;
+  background: rgba(11, 11, 11, 0.8);
+  border-radius: 20px;
+  padding: 0 10px;
+}
+
+#workspaces button {
+  color: white;
+}
+
+#window {
+  background: black;
+  color: white;
+}
+
+window#waybar.empty #window {
+  background: transparent;
+  color: transparent;
+  padding: 0;
+  margin: 0;
+  border: none;
+}
+
+#custom-notification {
+  /* background-color: #222; */
+  padding: 0 10px;
+  border-radius: 40px;
+  font-size: 20px;
+  font-weight: 600;
+  /* border: 2px solid #456; */
+}
+
+#custom-spotify {
+  border-color: limegreen;
+  border-style: solid;
+  border-width: 1px;
+  color: lightgreen;
+  border-radius: 20px;
+  background-color: #111111;
+  margin: 0 5px;
+}
+
+tooltip {
+  background: black;
+  color: #fff;
+  border-radius: 20px;
+  padding: 6px 25px;
+  font-size: 13px;
+  border: 1px solid #999;
+}
+
+#workspaces button.active {
+  background: #666;
+  border-radius: 20px;
+  border: 1px solid #999;
+  padding: 0 15px;
+  padding-right: 10px;
+  margin: 5px;
+}
+
+#custom-spotifyapp,
+#custom-terminal,
+#custom-firefox,
+#custom-files,
+#custom-discord,
+#custom-stremio,
+#custom-cpufreq,
+#custom-powermanager {
+  padding: 0 12px;
+  font-size: 22px;
+  border-radius: 20px;
+  color: lightblue;
+}
+
+#custom-terminal {
+  font-size: 25px;
+  padding: 0 8px;
+}
+
+#custom-terminal:hover,
+#custom-firefox:hover,
+#custom-files:hover,
+#custom-discord:hover,
+#custom-stremio:hover,
+#custom-cpufreq:hover,
+#custom-powermanager:hover {
+  color: white;
+}
+
+menu {
+  border-radius: 15px;
+  /* background: #161320; */
+}
+
+menuitem {
+  border-radius: 15px;
+}

@@ -1,0 +1,27 @@
+
+/* Popup menu background and text */
+.menu,
+.popup,
+.popup-menu {
+  /* background-color: #1e1e2e; */
+  color: #cdd6f4;
+  font-family: JetBrains Mono, sans-serif;
+  font-size: 13px;
+  border-radius: 8px;
+  padding: 4px;
+}
+
+/* Selected item hover */
+.menu menuitem:hover,
+.menu menuitem:focus,
+.popup-menu menuitem:hover {
+  background-color: #313244;
+  color: #f5c2e7;
+}
+
+/* Menu item separators */
+.separator {
+  background-color: #6c7086;
+  height: 1px;
+  margin: 4px 0;
+}

@@ -1,0 +1,6 @@
+alias ls='ls --color=auto'
+alias ll='ls -al --color=auto'
+alias grep='grep --color=auto'
+alias fzfcd='cd "$(find . -type d | fzf)"'
+alias pacsize="expac '%m %n' | sort -n | numfmt --to=iec"
+alias warp-conn='sudo warp-svc && warp-cli connect && warp-cli status'
