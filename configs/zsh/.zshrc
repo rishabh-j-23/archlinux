@@ -4,7 +4,7 @@ export PATH=$PATH:/usr/local/go/bin
 export PATH="$PATH:$(go env GOBIN):$(go env GOPATH)/bin"
 # Path to your Oh My Zsh installation.
 export ZSH="$HOME/.oh-my-zsh"
-export DEV_CONFIG=$HOME/sources/arch-setup/
+export DEV_CONFIG=$HOME/sources/archlinux/
 
 # Set name of the theme to load --- if set to "random", it will
 # load a random theme each time Oh My Zsh is loaded, in which case,

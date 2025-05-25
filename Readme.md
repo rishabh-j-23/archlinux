@@ -12,6 +12,15 @@ A simple bash utility to manage **reload**, **config**, and **install** actions 
 - Supports **dry-run** mode to preview actions without executing.
 
 ---
+## Init
+
+```bash
+DEV_CONFIG=~/sources/archlinux
+mkdir -p $DEV_CONFIG
+git clone git@github.com:rishabh-j-23/archlinux.git $DEV_CONFIG
+```
+
+---
 
 ## Usage
 
@@ -40,13 +49,13 @@ Reload the `hypr` package:
 Copy config files for `kitty` package:
 
 ```bash
-./dev configs kitty
+./dev configs alacritty
 ```
 
 Install the `neofetch` package:
 
 ```bash
-./dev install neofetch
+./dev install alacritty
 ```
 
 Dry-run example (no changes made, just preview commands):
