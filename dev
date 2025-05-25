@@ -5,6 +5,16 @@ PACKAGE=$2
 
 LOGGER="ERROR ::"
 
+if [[ $ACTION == "reload" ]]; then
+    reload_script="$(pwd)/reload/$PACKAGE.sh"
+    if [[ -f $reload_script ]]; then
+        echo "RELOADING::${PACKAGE}::[${reload_script}]"
+        bash $reload_script
+        exit 0
+    fi
+fi
+
+
 if [[ "$ACTION" == "configs" ]]; then
     if [[ -z "$PACKAGE" ]]; then
         echo "$LOGGER Missing package argument for config"
