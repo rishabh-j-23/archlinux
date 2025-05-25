@@ -5,7 +5,7 @@ options=(
   "pon  power on bluetooth"
   "pof  power off bluetooth"
   "con  connect bluetooth devices"
-  "cona  connect all bluetooth devices"
+  "cona connect all bluetooth devices"
   "dis  disconnect bluetooth devices"
   "gui  bluetooth settings gui"
 )

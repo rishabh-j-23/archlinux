@@ -5,7 +5,7 @@ PACKAGE=$2
 
 LOGGER="ERROR ::"
 
-if [[ "$ACTION" == "config" ]]; then
+if [[ "$ACTION" == "configs" ]]; then
     if [[ -z "$PACKAGE" ]]; then
         echo "$LOGGER Missing package argument for config"
         exit 1
