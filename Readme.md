@@ -52,7 +52,7 @@ Install the `neofetch` package:
 Dry-run example (no changes made, just preview commands):
 
 ```bash
-./dev configs hypr --dry-run
+./dev --dry-run configs hypr
 ```
 
 ---
