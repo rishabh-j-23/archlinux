@@ -1,58 +1,100 @@
-#!/usr/bin/bash
+#!/usr/bin/env bash
 
-ACTION=$1
-PACKAGE=$2
+ACTION="$1"
+PACKAGE="$2"
+DRY_RUN="$3"
 
 LOGGER="ERROR ::"
 
-if [[ $ACTION == "reload" ]]; then
-    reload_script="$(pwd)/reload/$PACKAGE.sh"
-    if [[ -f $reload_script ]]; then
-        echo "RELOADING::${PACKAGE}::[${reload_script}]"
-        bash $reload_script
-        exit 0
-    fi
-fi
+# Helper to run or echo based on dry run mode
+run() {
+  if [[ "$DRY_RUN" == "--dry-run" ]]; then
+    echo "[dry-run] $*"
+  else
+    eval "$@"
+  fi
+}
 
+reload_package() {
+  local script_path
+  script_path="$(pwd)/reload/$1.sh"
 
-if [[ "$ACTION" == "configs" ]]; then
-    if [[ -z "$PACKAGE" ]]; then
-        echo "$LOGGER Missing package argument for config"
-        exit 1
-    fi
+  if [[ -f "$script_path" ]]; then
+    echo "RELOADING::$1::[$script_path]"
+    run bash "$script_path"
 
-    if [[ $PACKAGE == "all" ]]; then
-        $(pwd)/configs/all.sh
-        exit 0
-    fi
-
-    CONFIG_PATH="$(pwd)/configs/$PACKAGE"
-    if [[ -d "$CONFIG_PATH" ]]; then
-        PACKAGE_CONFIG_DIR="$HOME/.config/$PACKAGE"
-        echo "removing::config at '$PACKAGE_CONFIG_DIR'"
-        rm -rf $PACKAGE_CONFIG_DIR
-        echo "copying::'$CONFIG_PATH' to '$PACKAGE_CONFIG_DIR'"
-        cp -r $CONFIG_PATH $PACKAGE_CONFIG_DIR
-    else
-        echo "$LOGGER $CONFIG_PATH not found"
-        exit 1
+    # flush stdin to prevent key bleed only if not dry-run
+    if [[ "$DRY_RUN" != "--dry-run" ]]; then
+      read -t 0.1 -n 10000 || true
     fi
 
-elif [[ "$ACTION" == "install" ]]; then
-    if [[ -z "$PACKAGE" ]]; then
-        echo "$LOGGER Missing package argument for install"
-        exit 1
-    fi
-
-    INSTALL_SCRIPT="$(pwd)/packages/$PACKAGE.sh"
-    if [[ -f "$INSTALL_SCRIPT" ]]; then
-        echo "INSTALLING::packages::$PACKAGE"
-        $INSTALL_SCRIPT
-    else
-        echo "$LOGGER $INSTALL_SCRIPT not found"
-        exit 1
-    fi
-else
-    echo "$LOGGER use 'config' || 'install' as first arg"
+    exit 0
+  else
+    echo "$LOGGER reload script not found: $script_path"
     exit 1
-fi
+  fi
+}
+
+config_package() {
+  if [[ -z "$1" ]]; then
+    echo "$LOGGER Missing package argument for config"
+    exit 1
+  fi
+
+  if [[ "$1" == "all" ]]; then
+    run "$(pwd)/configs/all.sh"
+    exit 0
+  fi
+
+  local config_path="$(pwd)/configs/$1"
+  local target_path="$HOME/.config/$1"
+
+  if [[ -d "$config_path" ]]; then
+    echo "removing::config at '$target_path'"
+    run rm -rf "$target_path"
+
+    echo "copying::'$config_path' to '$target_path'"
+    run cp -r "$config_path" "$target_path"
+  else
+    echo "$LOGGER config not found: $config_path"
+    exit 1
+  fi
+}
+
+install_package() {
+  if [[ -z "$1" ]]; then
+    echo "$LOGGER Missing package argument for install"
+    exit 1
+  fi
+
+  local install_script
+  install_script="$(pwd)/packages/$1.sh"
+
+  if [[ -f "$install_script" ]]; then
+    echo "INSTALLING::packages::$1"
+    run bash "$install_script"
+  else
+    echo "$LOGGER install script not found: $install_script"
+    exit 1
+  fi
+}
+
+main() {
+  case "$ACTION" in
+    reload)
+      reload_package "$PACKAGE"
+      ;;
+    configs)
+      config_package "$PACKAGE"
+      ;;
+    install)
+      install_package "$PACKAGE"
+      ;;
+    *)
+      echo "$LOGGER use 'reload', 'config', or 'install' as first arg"
+      exit 1
+      ;;
+  esac
+}
+
+main
