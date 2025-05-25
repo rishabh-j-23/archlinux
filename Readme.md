@@ -16,7 +16,7 @@ A simple bash utility to manage **reload**, **config**, and **install** actions 
 ## Usage
 
 ```bash
-./dev <action> <package> [--dry-run]
+./dev [--dry-run] <action> <package>
 ````
 
 ### Actions
