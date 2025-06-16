@@ -99,3 +99,6 @@ export LANG=en_US.UTF-8
 # fi
 
 source ~/.zsh_aliases
+if [[ -f ~/.pjsw/pjsw-switch.sh ]]; then
+    source ~/.pjsw/pjsw-switch.sh
+fi
