@@ -88,12 +88,9 @@ window#waybar.empty #window {
 }
 
 tooltip {
-    background: black;
-    color: #fff;
-    border-radius: 20px;
-    padding: 6px 25px;
-    font-size: 13px;
-    border: 1px solid #999;
+    background-color: lightslategrey;
+    border: none;
+    border: 1px solid #888;
 }
 
 #workspaces button.active {

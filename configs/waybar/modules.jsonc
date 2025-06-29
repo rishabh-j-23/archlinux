@@ -1,5 +1,7 @@
 {
     "backlight": {
+        "tooltip": true,
+        "tooltip-format": "Brightness: {percent}%",
         "interval": 2,
         "align": 0,
         "rotate": 0,
