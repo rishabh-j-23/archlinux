@@ -79,7 +79,7 @@ message {
     color: @black;
 }
 inputbar {
-    color: @lightgreen;
+    color: @lightblue;
     padding: 11px;
     background-color: @tlightblack;
     border: 2px 2px 2px 2px;
@@ -115,13 +115,15 @@ element {
 element-text {
     background-color: inherit;
     text-color:       inherit;
+    padding:      5px 10px;
 }
 element-icon {
+    size: 1.3em;
     padding: 0 10px 0 5px;        
 }
 element selected.normal {
     background-color: @blue;
-    border-radius: 20px;
+    border-radius: 10px;
 }
 element normal active {
     foreground: @lightblue;
