@@ -66,6 +66,8 @@
         "icon": true,
         "icon-size": 20,
         "separate-outputs": true,
+        "tooltip": true,
+        "tooltip-format": "{class} - {title}",
     },
     "hyprland/workspaces": {
         "format": "{name}",
