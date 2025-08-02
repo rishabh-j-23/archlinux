@@ -2,9 +2,12 @@
     padding: 0px;
     margin: 0px;
     border-radius: 0px;
-    font-family: "GeistMono Nerd Font", "Fira Code Nerd Font";
+    /* font-family: "JetBrainsMono Nerd Font"; */
+    /* font-family: "MesloLGSDZ Nerd Font "; */
+    font-family: "GeistMono Nerd Font";
+    /* font-family: "FiraCode Nerd Font"; */
     font-size: 12px;
-    font-weight: 800;
+    font-weight: 600;
     min-height: 0;
 }
 

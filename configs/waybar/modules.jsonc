@@ -118,7 +118,8 @@
         "align": 0,
         "rotate": 0,
         "full-at": 100,
-        "design-capacity": false,
+        "design-capacity": true,
+        // "icon-size": 20,
         "states": {
             "good": 95,
             "warning": 30,
@@ -221,8 +222,8 @@
         },
     },
     "tray": {
-        "icon-size": 22,
-        "spacing": 6,
+        "icon-size": 20,
+        "spacing": 7,
         "show-passive-items": true,
         "icon": true,
     },
