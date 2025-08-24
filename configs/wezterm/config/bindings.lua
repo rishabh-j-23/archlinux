@@ -1,6 +1,5 @@
 local wezterm = require('wezterm')
 local platform = require('utils.platform')
-local backdrops = require('utils.backdrops')
 local act = wezterm.action
 
 local mod = {}
@@ -13,203 +12,76 @@ elseif platform.is_win or platform.is_linux then
    mod.SUPER_REV = 'ALT|CTRL'
 end
 
--- stylua: ignore
-local keys = {
-   -- misc/useful --
-   { key = 'F1', mods = 'NONE', action = 'ActivateCopyMode' },
-   { key = 'F2', mods = 'NONE', action = act.ActivateCommandPalette },
-   { key = 'F3', mods = 'NONE', action = act.ShowLauncher },
-   { key = 'F4', mods = 'NONE', action = act.ShowLauncherArgs({ flags = 'FUZZY|TABS' }) },
-   {
-      key = 'F5',
-      mods = 'NONE',
-      action = act.ShowLauncherArgs({ flags = 'FUZZY|WORKSPACES' }),
-   },
-   { key = 'F11', mods = 'NONE',    action = act.ToggleFullScreen },
-   { key = 'F12', mods = 'NONE',    action = act.ShowDebugOverlay },
-   { key = 'f',   mods = mod.SUPER, action = act.Search({ CaseInSensitiveString = '' }) },
-   {
-      key = 'u',
-      mods = mod.SUPER,
-      action = wezterm.action.QuickSelectArgs({
-         label = 'open url',
-         patterns = {
-            '\\((https?://\\S+)\\)',
-            '\\[(https?://\\S+)\\]',
-            '\\{(https?://\\S+)\\}',
-            '<(https?://\\S+)>',
-            '\\bhttps?://\\S+[)/a-zA-Z0-9-]+'
-         },
-         action = wezterm.action_callback(function(window, pane)
-            local url = window:get_selection_text_for_pane(pane)
-            wezterm.log_info('opening: ' .. url)
-            wezterm.open_with(url)
-         end),
-      }),
-   },
-
-   -- cursor movement --
-   { key = 'LeftArrow',  mods = mod.SUPER,     action = act.SendString '\x1bOH' },
-   { key = 'RightArrow', mods = mod.SUPER,     action = act.SendString '\x1bOF' },
-   { key = 'Backspace',  mods = mod.SUPER,     action = act.SendString '\x15' },
-
-   -- copy/paste --
-    { key = 'c',          mods = 'CTRL|SHIFT',  action = act.CopyTo('Clipboard') },
-   { key = 'v',          mods = 'CTRL|SHIFT',  action = act.PasteFrom('Clipboard') },
-
-   -- tabs --
-   -- tabs: spawn+close
-   { key = 't',          mods = mod.SUPER,     action = act.SpawnTab('DefaultDomain') },
-   { key = 't',          mods = mod.SUPER_REV, action = act.SpawnTab({ DomainName = 'WSL:Ubuntu' }) },
-   { key = 'w',          mods = mod.SUPER_REV, action = act.CloseCurrentTab({ confirm = false }) },
-
-   -- tabs: navigation
-   { key = '[',          mods = mod.SUPER,     action = act.ActivateTabRelative(-1) },
-   { key = ']',          mods = mod.SUPER,     action = act.ActivateTabRelative(1) },
-   { key = '[',          mods = mod.SUPER_REV, action = act.MoveTabRelative(-1) },
-   { key = ']',          mods = mod.SUPER_REV, action = act.MoveTabRelative(1) },
-
-   -- tab: title
-   { key = '0',          mods = mod.SUPER,     action = act.EmitEvent('tabs.manual-update-tab-title') },
-   { key = '0',          mods = mod.SUPER_REV, action = act.EmitEvent('tabs.reset-tab-title') },
-
-   -- tab: hide tab-bar
-   { key = '9',          mods = mod.SUPER,     action = act.EmitEvent('tabs.toggle-tab-bar'), },
-
-   -- window --
-   -- spawn windows
-   { key = 'n',          mods = mod.SUPER,     action = act.SpawnWindow },
-
-   -- background controls --
-   {
-      key = [[/]],
-      mods = mod.SUPER,
-      action = wezterm.action_callback(function(window, _pane)
-         backdrops:random(window)
-      end),
-   },
-   {
-      key = [[,]],
-      mods = mod.SUPER,
-      action = wezterm.action_callback(function(window, _pane)
-         backdrops:cycle_back(window)
-      end),
-   },
-   {
-      key = [[.]],
-      mods = mod.SUPER,
-      action = wezterm.action_callback(function(window, _pane)
-         backdrops:cycle_forward(window)
-      end),
-   },
-   {
-      key = [[/]],
-      mods = mod.SUPER_REV,
-      action = act.InputSelector({
-         title = 'InputSelector: Select Background',
-         choices = backdrops:choices(),
-         fuzzy = true,
-         fuzzy_description = 'Select Background: ',
-         action = wezterm.action_callback(function(window, _pane, idx)
-            if not idx then
-               return
-            end
-            ---@diagnostic disable-next-line: param-type-mismatch
-            backdrops:set_img(window, tonumber(idx))
-         end),
-      }),
-   },
-   {
-      key = 'b',
-      mods = mod.SUPER,
-      action = wezterm.action_callback(function(window, _pane)
-         backdrops:toggle_focus(window)
-      end)
-   },
-
-   -- panes --
-   -- panes: split panes
-   {
-      key = [[\]],
-      mods = mod.SUPER,
-      action = act.SplitVertical({ domain = 'CurrentPaneDomain' }),
-   },
-   {
-      key = [[\]],
-      mods = mod.SUPER_REV,
-      action = act.SplitHorizontal({ domain = 'CurrentPaneDomain' }),
-   },
-
-   -- panes: zoom+close pane
-   { key = 'Enter', mods = mod.SUPER,     action = act.TogglePaneZoomState },
-   { key = 'w',     mods = mod.SUPER,     action = act.CloseCurrentPane({ confirm = false }) },
-
-   -- panes: navigation
-   { key = 'k',     mods = mod.SUPER_REV, action = act.ActivatePaneDirection('Up') },
-   { key = 'j',     mods = mod.SUPER_REV, action = act.ActivatePaneDirection('Down') },
-   { key = 'h',     mods = mod.SUPER_REV, action = act.ActivatePaneDirection('Left') },
-   { key = 'l',     mods = mod.SUPER_REV, action = act.ActivatePaneDirection('Right') },
-   {
-      key = 'p',
-      mods = mod.SUPER_REV,
-      action = act.PaneSelect({ alphabet = '1234567890', mode = 'SwapWithActiveKeepFocus' }),
-   },
-
-   -- key-tables --
-   -- resizes fonts
-   {
-      key = 'f',
-      mods = 'LEADER',
-      action = act.ActivateKeyTable({
-         name = 'resize_font',
-         one_shot = false,
-         timemout_miliseconds = 1000,
-      }),
-   },
-   -- resize panes
-   {
-      key = 'p',
-      mods = 'LEADER',
-      action = act.ActivateKeyTable({
-         name = 'resize_pane',
-         one_shot = false,
-         timemout_miliseconds = 1000,
-      }),
-   },
-}
-
--- stylua: ignore
-local key_tables = {
-   resize_font = {
-      { key = 'k',      action = act.IncreaseFontSize },
-      { key = 'j',      action = act.DecreaseFontSize },
-      { key = 'r',      action = act.ResetFontSize },
-      { key = 'Escape', action = 'PopKeyTable' },
-      { key = 'q',      action = 'PopKeyTable' },
-   },
-   resize_pane = {
-      { key = 'k',      action = act.AdjustPaneSize({ 'Up', 1 }) },
-      { key = 'j',      action = act.AdjustPaneSize({ 'Down', 1 }) },
-      { key = 'h',      action = act.AdjustPaneSize({ 'Left', 1 }) },
-      { key = 'l',      action = act.AdjustPaneSize({ 'Right', 1 }) },
-      { key = 'Escape', action = 'PopKeyTable' },
-      { key = 'q',      action = 'PopKeyTable' },
-   },
-}
-
-local mouse_bindings = {
-   -- Ctrl-click will open the link under the mouse cursor
-   {
-      event = { Up = { streak = 1, button = 'Left' } },
-      mods = 'CTRL',
-      action = act.OpenLinkAtMouseCursor,
-   },
-}
+local leader = nil
+if wezterm.target_triple:find('windows') then
+   leader = { key = 'B', mods = 'CTRL' }
+else
+   leader = { key = 'Space', mods = 'ALT' }
+end
 
 return {
    disable_default_key_bindings = true,
-   leader = { key = 'Space', mods = mod.SUPER_REV },
-   keys = keys,
-   key_tables = key_tables,
-   mouse_bindings = mouse_bindings,
+
+   -- Main leader key: CTRL + Space (like tmux prefix)
+   leader = { key = 'Space', mod = mod.SUPER },
+
+   keys = {
+      -- Tabs (tmux windows)
+      { key = 'c', mods = 'LEADER', action = act.SpawnTab('CurrentPaneDomain') },
+      { key = '&', mods = 'LEADER|SHIFT', action = act.CloseCurrentTab({ confirm = true }) },
+      { key = '0', mods = 'LEADER', action = act.ActivateTab(-1) },
+      { key = '1', mods = 'LEADER', action = act.ActivateTab(0) },
+      { key = '2', mods = 'LEADER', action = act.ActivateTab(1) },
+      { key = '3', mods = 'LEADER', action = act.ActivateTab(2) },
+      { key = '4', mods = 'LEADER', action = act.ActivateTab(3) },
+      { key = '5', mods = 'LEADER', action = act.ActivateTab(4) },
+      { key = '6', mods = 'LEADER', action = act.ActivateTab(5) },
+      { key = '7', mods = 'LEADER', action = act.ActivateTab(6) },
+      { key = '8', mods = 'LEADER', action = act.ActivateTab(7) },
+      { key = '9', mods = 'LEADER', action = act.ActivateTab(8) },
+
+      -- Panes (tmux splits)
+      {
+         key = '|',
+         mods = 'LEADER',
+         action = act.SplitHorizontal({ domain = 'CurrentPaneDomain' }),
+      },
+      { key = '-', mods = 'LEADER', action = act.SplitVertical({ domain = 'CurrentPaneDomain' }) },
+      { key = 'x', mods = 'LEADER', action = act.CloseCurrentPane({ confirm = true }) },
+
+      -- Pane navigation (vim-style, like tmux + vim-tmux-navigator)
+      { key = 'h', mods = 'LEADER', action = act.ActivatePaneDirection('Left') },
+      { key = 'j', mods = 'LEADER', action = act.ActivatePaneDirection('Down') },
+      { key = 'k', mods = 'LEADER', action = act.ActivatePaneDirection('Up') },
+      { key = 'l', mods = 'LEADER', action = act.ActivatePaneDirection('Right') },
+
+      -- Pane resize mode (like tmux :resize-pane)
+      {
+         key = 'r',
+         mods = 'LEADER',
+         action = act.ActivateKeyTable({
+            name = 'resize_pane',
+            one_shot = false,
+            timeout_milliseconds = 1000,
+         }),
+      },
+
+      -- Copy mode (tmux [ )
+      { key = '[', mods = 'LEADER', action = act.ActivateCopyMode },
+
+      -- Reload config (tmux prefix + R)
+      { key = 'R', mods = 'LEADER|SHIFT', action = act.ReloadConfiguration },
+   },
+
+   -- Resize pane mode (hjkl + arrows)
+   key_tables = {
+      resize_pane = {
+         { key = 'h', action = act.AdjustPaneSize({ 'Left', 3 }) },
+         { key = 'j', action = act.AdjustPaneSize({ 'Down', 3 }) },
+         { key = 'k', action = act.AdjustPaneSize({ 'Up', 3 }) },
+         { key = 'l', action = act.AdjustPaneSize({ 'Right', 3 }) },
+         { key = 'Escape', action = 'PopKeyTable' },
+         { key = 'q', action = 'PopKeyTable' },
+      },
+   },
 }
